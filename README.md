@@ -27,10 +27,10 @@ unsigned char h1Coeffs[15] = { 0 };
 result = pCalculateH1(bytes1, bytes2, KeyArray, ifTrue, h1Coeffs, retValue);
 
 //Extract M value from h1Coeffs
-unsigned char resultBytes[8] = { 0 };
+unsigned char M[8] = { 0 };
 if (ifTrue[0] == 1) {
 	retValue[4] = 1;	
-	result = pExtractM(bytes1, h1Coeffs, resultBytes, retValue);
+	result = pExtractM(bytes1, h1Coeffs, M, retValue);
 	
 }
 ```
