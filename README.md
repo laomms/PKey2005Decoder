@@ -16,13 +16,17 @@ int retValue[5] = { 0 };
 int result = pPubkeyParser(pMem, bPublicKey, 0x62b, retValue);
 
 //Calculate h1Coeffs from pid3 key array and and pkeyconfig data
+typedef struct _PubkeyData {
+	unsigned char header[44];
+	unsigned char bytes1[44];
+	unsigned char bytes2[36];
+	int end_marker;
+
+} PubkeyData;
+PubkeyData* pData = (PubkeyData*)pMem[6];
+unsigned char* bytes1 = pData->bytes1;  
+unsigned char* bytes2 = pData->bytes2;  
 unsigned char ifTrue[4] = { 0 };
-unsigned char bytes[200];
-std::memcpy(bytes, reinterpret_cast<void*>(static_cast<uintptr_t>(pMem[6])), sizeof(bytes));
-unsigned char bytes1[44];
-unsigned char bytes2[36];
-memcpy(bytes1, bytes + 44, 44);
-memcpy(bytes2, bytes + 88, 36);
 unsigned char h1Coeffs[15] = { 0 };
 result = pCalculateH1(bytes1, bytes2, KeyArray, ifTrue, h1Coeffs, retValue);
 
