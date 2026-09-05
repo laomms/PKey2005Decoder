@@ -1,4 +1,4 @@
-## PKey2005 Pairing-Based Cryptography
+## PKey2005 Pairing-Based Cryptography(Curve-based Cryptosystem)
 ### How to use
 
 ```c
