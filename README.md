@@ -1,4 +1,4 @@
-## PKey2005 Pairing-Based Cryptography(Curve-based Cryptosystem)
+## PKey2005 Pairing-Based Cryptography(Curve-based Cryptosystem)    
 
 这个 DLL 是干什么的
 PidKeyData.dll 是微软 PKEY2005 产品密钥验证算法 的核心库。它负责验证一个 Windows 产品密钥的「数字签名」是否合法——具体手段是用 Squared Tate 配对（一种基于超奇异椭圆曲线的配对密码学）对产品密钥的数据做一次配对运算，得到校验值 H1，再和密钥里内嵌的签名字段比对。
