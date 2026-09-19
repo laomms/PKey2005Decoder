@@ -113,7 +113,7 @@ M 值 = 40 65 7E 6D AB 00 00 00
 ---
 
 ## How to use
-
+#### c++版调用
 ```c
 typedef int(__fastcall* PubkeyParserDelegate)(int* pDstMem, unsigned char* PublicKeyBytes, unsigned int dwSize, int* retValue);
 typedef int(__fastcall* CalculateH1Delegate)(unsigned char* pMem1, unsigned char* pMem2, unsigned char* PID3Array, unsigned char* isValid, unsigned char* h1Coeffs, int* retValue);
@@ -151,3 +151,33 @@ if (ifTrue[0] == 1) {
     result = pExtractM(bytes1, h1Coeffs, M, retValue);
 }
 ```
+
+#### c#版调用
+```c#
+Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
+{
+    // —— 本线程内 Parse + 计算，绝不跨线程传递公钥缓冲 ——
+    byte[] pk = Concat(ConfigData2005.PublicKeyPart1, item.Value);
+
+    int seq; string cfg; byte[] h, u;
+    if (!PKeyCalc.TryPubKey(pk, bEncryptArray, out seq, out cfg, out h, out u))
+    {
+        if (!quiet)
+            Console.WriteLine("  ✗ groupId=" + item.Key + "   累计 "
+                + sw.Elapsed.TotalSeconds.ToString("F1") + "s");
+        return;
+    }
+
+    lock (gate)
+    {
+        if (groupId != 0) return;      // 已有结果
+        groupId = item.Key; channelSeq = seq; actPkeyConfig = cfg;
+        h1Out = h; uidOut = u;
+    }
+    Interlocked.Exchange(ref done, 1);
+    if (!quiet) Console.WriteLine("命中 groupId=" + item.Key);
+    if (Array.IndexOf(args, "all") < 0) state.Stop();
+});
+```
+
+c++调用单个公钥大约0.7秒, C#版本release编译的计算时间是c++原版的两倍以上.极力推荐用c++版.
