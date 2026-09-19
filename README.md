@@ -195,13 +195,21 @@ if (groupId == 0)
     return 1;
 }
 
+long Secret = BitConverter.ToInt64(h1Out, 0);
+int value1 = (uidOut[3] >> 7) | (uidOut[4] * 2);
+int value2 = (uidOut[5] * 2 | uidOut[4] >> 7) & 3;
+byte b1 = (byte)(value1 & 0xFF);
+byte b2 = (byte)(value2 & 0xFF);
+byte[] hashData = new byte[] { b1, b2, 0, 0, 0, 0, 0, 0 };
+
 Console.WriteLine();
 Console.WriteLine("groupId       = " + groupId);
 Console.WriteLine("keyId         = " + keyId);
 Console.WriteLine("actPkeyConfig = " + actPkeyConfig);
 Console.WriteLine("h1Coeffs      = " + BitConverter.ToString(h1Out).Replace("-", ""));
-Console.WriteLine("uid           = " + BitConverter.ToString(uidOut).Replace("-", ""));
-Console.WriteLine("耗时          = " + sw.Elapsed.TotalSeconds.ToString("F2") + "s");
+Console.WriteLine("uniqueId      = " + BitConverter.ToString(uidOut).Replace("-", ""));
+Console.WriteLine("hashData      = " + BitConverter.ToString(hashData).Replace("-", ""));
+Console.WriteLine("耗时           = " + sw.Elapsed.TotalSeconds.ToString("F2") + "s");
 ```
 
 c++调用单个公钥大约0.7秒, C#版本release编译的计算时间是c++原版的两倍以上.极力推荐用c++版.
