@@ -156,7 +156,7 @@ if (ifTrue[0] == 1) {
 ```c#
 Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 {
-    // —— 本线程内 Parse + 计算，绝不跨线程传递公钥缓冲 ——
+
     byte[] pk = Concat(ConfigData2005.PublicKeyPart1, item.Value);
 
     int seq; string cfg; byte[] h, u;
@@ -170,7 +170,7 @@ Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 
     lock (gate)
     {
-        if (groupId != 0) return;      // 已有结果
+        if (groupId != 0) return;     
         groupId = item.Key; channelSeq = seq; actPkeyConfig = cfg;
         h1Out = h; uidOut = u;
     }
