@@ -1,4 +1,4 @@
-# PKey2005 Pairing-Based Cryptography (Curve-based Cryptosystem)
+# PKey2005 Pairing-Based Cryptography
 
 ## 这个 DLL 是干什么的
 
@@ -212,4 +212,4 @@ Console.WriteLine("hashData      = " + BitConverter.ToString(hashData).Replace("
 Console.WriteLine("耗时           = " + sw.Elapsed.TotalSeconds.ToString("F2") + "s");
 ```
 
-c++调用单个公钥大约0.7秒, C#版本release编译的计算时间是c++原版的两倍以上.极力推荐用c++版.
+c++调用单个公钥大约0.7秒, C#版本release编译的计算时间是c++原版的2倍以上.极力推荐用c++版.
