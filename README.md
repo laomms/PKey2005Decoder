@@ -154,6 +154,15 @@ if (ifTrue[0] == 1) {
 
 #### c#版调用
 ```c#
+var sw = Stopwatch.StartNew();
+
+int groupId = 0, channelSeq = 0;
+string actPkeyConfig = null;
+byte[] h1Out = null, uidOut = null;
+object gate = new object();
+int done = 0;
+
+var popts = new ParallelOptions { MaxDegreeOfParallelism = dop };
 Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 {
 
@@ -170,7 +179,7 @@ Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 
     lock (gate)
     {
-        if (groupId != 0) return;     
+        if (groupId != 0) return;    
         groupId = item.Key; channelSeq = seq; actPkeyConfig = cfg;
         h1Out = h; uidOut = u;
     }
@@ -178,6 +187,22 @@ Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
     if (!quiet) Console.WriteLine("命中 groupId=" + item.Key);
     if (Array.IndexOf(args, "all") < 0) state.Stop();
 });
+
+sw.Stop();
+
+if (groupId == 0)
+{
+    Console.WriteLine("未找到匹配的公钥（耗时 " + sw.Elapsed.TotalSeconds.ToString("F2") + "s）");
+    return 1;
+}
+
+Console.WriteLine();
+Console.WriteLine("groupId       = " + groupId);
+Console.WriteLine("channelSeq    = " + channelSeq);
+Console.WriteLine("actPkeyConfig = " + actPkeyConfig);
+Console.WriteLine("h1Coeffs      = " + BitConverter.ToString(h1Out).Replace("-", ""));
+Console.WriteLine("uid           = " + BitConverter.ToString(uidOut).Replace("-", ""));
+Console.WriteLine("耗时          = " + sw.Elapsed.TotalSeconds.ToString("F2") + "s");
 ```
 
 c++调用单个公钥大约0.7秒, C#版本release编译的计算时间是c++原版的两倍以上.极力推荐用c++版.
