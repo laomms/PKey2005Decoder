@@ -277,8 +277,6 @@ dataOff + 2 = 61 = H1Bases[1]
 | 密钥 | `keyByte` | `h1Coeffs[4..14]` | `M` |
 |---|---|---|---|
 | `J6999-VHTDQ-KYQWG-4YV9C-YDWHX` | `0x0A` | 2, 8, 11, 8, 1, 1, 0, 0, 3, 6, 41 | `0x178997B9E52` |
-| `4F92T-JJB26-HPKYW-M83XY-7DY33` | `0x1C`（预测） | — | `0x13C5F0A2040` |
-| `33PXH-7Y6KF-2VJC9-XBBR8-HVTHH` | `0x1C` | — | `0xAB6D7E6540` |
 
 ### 7.2 黄金向量
 
