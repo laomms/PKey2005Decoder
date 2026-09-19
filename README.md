@@ -156,7 +156,7 @@ if (ifTrue[0] == 1) {
 ```c#
 var sw = Stopwatch.StartNew();
 
-int groupId = 0, channelSeq = 0;
+int groupId = 0, keyId = 0;
 string actPkeyConfig = null;
 byte[] h1Out = null, uidOut = null;
 object gate = new object();
@@ -165,8 +165,7 @@ int done = 0;
 var popts = new ParallelOptions { MaxDegreeOfParallelism = dop };
 Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 {
-
-    byte[] pk = Concat(ConfigData2005.PublicKeyPart1, item.Value);
+    byte[] pk = ConfigData2005.PublicKeyPart1.Concat(item.Value).ToArray();
 
     int seq; string cfg; byte[] h, u;
     if (!PKeyCalc.TryPubKey(pk, bEncryptArray, out seq, out cfg, out h, out u))
@@ -179,8 +178,8 @@ Parallel.ForEach(ConfigData2005.PublicKeyPart2, popts, (item, state) =>
 
     lock (gate)
     {
-        if (groupId != 0) return;    
-        groupId = item.Key; channelSeq = seq; actPkeyConfig = cfg;
+        if (groupId != 0) return;      
+        groupId = item.Key; keyId = seq; actPkeyConfig = cfg;
         h1Out = h; uidOut = u;
     }
     Interlocked.Exchange(ref done, 1);
@@ -198,7 +197,7 @@ if (groupId == 0)
 
 Console.WriteLine();
 Console.WriteLine("groupId       = " + groupId);
-Console.WriteLine("channelSeq    = " + channelSeq);
+Console.WriteLine("keyId         = " + keyId);
 Console.WriteLine("actPkeyConfig = " + actPkeyConfig);
 Console.WriteLine("h1Coeffs      = " + BitConverter.ToString(h1Out).Replace("-", ""));
 Console.WriteLine("uid           = " + BitConverter.ToString(uidOut).Replace("-", ""));
